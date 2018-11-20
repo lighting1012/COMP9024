@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>COMP9024 18s2 - Assignment 1</title>
+<link rel='stylesheet' type='text/css' href='./course.css'></head>
+<body>
+<div align='center'>
+<table width='100%' border='0'>
+<tr valign='top'>
+<td align='left' width='25%'>
+  <span class='tiny'><a href="http://www.cse.unsw.edu.au/~cs9024/18s2/index.php">COMP9024 18s2</a></span>
+</td>
+<td align='center' width='50%'>
+  <span class='heading'>Assignment 1</span><br>
+  <span class='subheading'>Transport Card Manager</span>
+</td>
+<td align='right' width='25%'>
+  <span class='tiny'><a href="http://www.handbook.unsw.edu.au/postgraduate/courses/2018/COMP9024.html">Data Structures and Algorithms</a></span>
+</td>
+</table>
+</div>
+<h2>Change Log</h2>
+
+We may make minor changes to the spec to address/clarify some outstanding issues. These may require minimal changes in your design/code, if at all. Students are strongly encouraged to check the change log regularly.
+<br><br>
+<b>16 August</b>
+<ul>
+   <li>Typo in <tt>cardRecord.c</tt> (provided as part of the starter code) corrected: printCardRecord() changed to printCardData()
+   <li>Typo in the example for stage 2 corrected
+</ul>
+<b>Version 1: Released on 15 August 2018</b>
+
+<h2>Objectives</h2>
+
+<p>The assignment aims to give you more experience with</p>
+<ul>
+<li> dynamic data structures, specifically dynamic arrays and linked lists
+<li> implementing (abstract) data types
+<li> asymptotic runtime analysis
+</ul>
+
+<h2>Admin</h2>
+
+<table cellpadding="6">
+<tr><td valign="top"><b>Marks</b></td><td></td>
+  <td>4 marks for stage 1 (correctness)
+  <br>2 marks for stage 2 (correctness)
+  <br>2 marks for stage 3 (correctness)
+  <br>1 mark for complexity analysis (stages 2 &amp; 3 only)
+  <br>1 mark for style
+  <br>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+  <br>Total: 10 marks</td></tr>
+<tr><td><b>Due</b><td></td><td>23:59 on <b>Monday</b> 27 August (week 6)</td></tr>
+<tr><td valign="top"><b>Late</b><td></td><td>1.5 marks (15%) off the ceiling per day late
+  <br><small>(e.g. if you are 25 hours late, your maximum possible mark is 7)</small></td></tr>
+</table>
+
+<h2>Aim</h2>
+
+<p>Your task is to write a program for reading and processing a collection of transport card records (stage 1) and for maintaining them (stages 2 &amp; 3). You will have to complete wrapper code to test your implementations, and make sure to test a variety of conditions. You will also have to provide the time complexity of your functions for maintaining the card records.</p>
+
+<h2>Provided Code</h2>
+
+<p>A <i>zip file</i> is a way of compressing and packaging files. We have provided a zip file as a base for you to begin the assignment. You can download it here: <a href="https://www.cse.unsw.edu.au/~cs9024/18s2/assn/assn1/starterCode.zip"><tt>starterCode.zip</tt></a></p>
+
+<p>When you <tt>unzip</tt> the package, you will find six files in your current directory:
+<ul>
+<li><tt>main.c</tt>: &nbsp; The incomplete main program.
+<li><tt>cardRecord.h</tt>: &nbsp; A header file that lists the functions in the card record implementation. <i>Do not change.</i>
+<li><tt>cardRecord.c</tt>: &nbsp; An incomplete library of functions for reading and writing single transport card records.
+<li><tt>cardLL.h</tt>: &nbsp; A header file that lists the functions in the linked list implementation. <i>Do not change.</i>
+<li><tt>cardLL.c</tt>: &nbsp; An incomplete library of functions for maintaining a linked list of transport card records.
+<li><tt>Makefile</tt>: &nbsp; Used to make an executable <tt>main</tt> from the main program and the two modules.
+</ul>
+</p>
+
+<br><h2>Stage 1 &ndash; Dynamic Array (4 marks)</h2>
+
+<p>For stage 1, you will need to implement functions in <tt>cardRecord.c</tt> and write code in <tt>main.c</tt> for a program that</p>
+<ol>
+<li> accepts a positive number <i>n</i> as a single command line argument
+<li> uses a <b><i>dynamic array on the heap</i></b> to store <i>n</i> transport card records from user input
+<li> prints all card records
+<li> prints some statistical information
+</ol>
+<p>For each card, your program should prompt the user to
+<ul>
+<li> &nbsp;"<tt>Enter card ID: </tt>"&nbsp; (expecting an 8-digit number, whose first digit must be non-zero)
+<li> &nbsp;"<tt>Enter amount: </tt>"&nbsp; (expecting a floating point number between -2.35, the minimim balance, and 250, the maximum balance)
+</ul>
+<p>Your program should detect any invalid input and, where necessary, ask the user to re-enter data with the message &nbsp;"<tt>Not valid. Enter a valid value: </tt>".
+</p>
+The output should be as follows:
+<ul>
+<li> for each card,
+<ul>
+<li> an opening line &nbsp;"<tt>-----------------</tt>"
+<li> a line &nbsp;"<tt>Card ID: </tt>"&nbsp; followed by the ID
+<li> a line &nbsp;"<tt>Balance: </tt>"&nbsp; followed by the balance on the card displayed as positive or negative $-value
+<li> a line &nbsp;"<tt>Low balance</tt>"&nbsp; if the balance is below $5.00
+<li> a closing line &nbsp;"<tt>-----------------</tt>"
+</ul>
+<li> a line &nbsp;"<tt>Number of cards on file: </tt>"&nbsp; followed by the number of cards
+<li> a line &nbsp;"<tt>Average balance: </tt>"&nbsp; followed by the average balance across all transport cards
+</ul>
+<p>Finally, you must ensure that all dynamically allocated memory has been freed upon termination of your program.</p>
+
+<h2><small>Example</small></h2>
+
+Here is an example to show the desired behaviour of your program for stage 1:
+<pre class="command_line">
+<kbd class="shell">./main 2</kbd>
+Enter card ID: 123456
+Not valid. Enter a valid value: 12345678
+Enter amount: 100
+Enter card ID: 11111111
+Enter amount: -5
+Not valid. Enter a valid value: -2.3
+-----------------
+Card ID: 12345678
+Balance: $100.00
+-----------------
+-----------------
+Card ID: 11111111
+Balance: -$2.30
+Low balance
+-----------------
+Number of cards on file: 2
+Average balance: $48.85
+</pre>
+
+<p><i>Note:</i>
+<ul>
+<li> Card records are printed in the order in which they have been entered.
+<li> You may assume that no card ID is entered twice.
+<li> All $-amounts get rounded to second decimal place when printed.
+<li> Negative $-amounts should always be printed exactly as shown in the example.
+</ul></p>
+
+<ul>
+</ul>
+
+<br><h2>Stage 2 &ndash; Linked List (2 marks)</h2>
+
+<p>Aim: For stage 2, you will implement most of the functions in <tt>cardLL.c</tt>, analyse the time complexity of your implementation and add code to <tt>main.c</tt>.</p>
+
+When you run the main program without command line argument, you will be presented with these options:
+<pre class="command_line">
+<kbd class="shell">./main</kbd>
+Enter command (a,g,p,q,r, h for Help)> 
+</pre>
+</p>
+If you type <tt><b>h</b></tt> for Help, you will see a more detailed list of commands:
+<pre>
+ a - Add card record
+ g - Get average balance
+ h - Help
+ p - Print all card records
+ r - Remove card
+ q - Quit
+</pre>
+</p>
+<p>When you type <tt><b>q</b></tt> the program exits.</p>
+<p>For this stage, you are to use a <b><i>dynamic linked list</i></b> to implement the following commands:
+<ol>
+<li> <tt>a</tt> &ndash; prompts the user to input valid data for a transport card record as above, inserts the record into the linked list and outputs &nbsp;"<tt>Card added.</tt>"
+<li> <tt>g</tt> &ndash; outputs the total number of card records and the average balance across all transport cards in the list
+<li> <tt>p</tt> &ndash; prints all transport card records
+<br><br>
+<li> Your program should include a time complexity analysis, in Big-Oh notation, for your functions in <tt>cardLL.c</tt>:
+<ul>
+<li> The size <i>n</i> of the input is given by the length of the linked list (i.e. the number of card records).
+<li> Each function should be preceded by two comment lines:
+<pre>
+// Time complexity: O(...)
+// Explanation: ...
+</pre>
+<li> You only need to provide time complexity for the functions that are also defined in <tt>cardLL.h</tt>.
+</ul>
+<br>
+<li> You must ensure that all dynamically allocated memory is properly freed.
+</ol>
+
+
+<h2><small>Example</small></h2>
+
+Here is an example to show the desired behaviour of your program for stage 2:
+<pre class="command_line">
+<kbd class="shell">./main</kbd>
+Enter command (a,g,p,q,r, h for Help)> <b>a</b>
+Enter card ID: 33333333
+Enter amount: -1
+Card added.
+Enter command (a,g,p,q,r, h for Help)> <b>a</b>
+Enter card ID: 11111111
+Enter amount: 41
+Card added.
+Enter command (a,g,p,q,r, h for Help)> <b>g</b>
+Number of cards on file: 2
+Average balance: $20.00
+Enter command (a,g,p,q,r, h for Help)> <b>p</b>
+-----------------
+Card ID: 11111111
+Balance: $41.00
+-----------------
+-----------------
+Card ID: 33333333
+Balance: -$1.00
+Low balance
+-----------------
+Enter command (a,g,p,q,r, h for Help)> <b>q</b>
+Bye.
+</pre>
+
+<p><i>Note:</i>
+<ul>
+<li> As before, you can assume that all card IDs will be different.
+<li> For stage 2, new records should always be added at the <i>beginning</i> of the list
+<ul>
+<li> so they are displayed in reverse order when printed.
+</ul>
+</ul>
+
+<br><h2>Stage 3 &ndash; Ordered Linked List (2 marks)</h2>
+
+<p>Aim: For stage 3, you will modify and complete the implementation in <tt>cardLL.c</tt> and also complete <tt>main.c</tt>:
+<ol>
+<li> Extend the functionality of the command &nbsp;<tt>a</tt>&nbsp; (adding a record):
+<ul type"a">
+<li> <i>New</i> cards should now be inserted into the list in <i>ascending order</i> of the card ID.
+<li> <i>Existing</i> cards should have their balance updated by the specified transaction amount, and the updated card record should be printed.
+</ul>
+<li> Implement the command &nbsp;<tt>r</tt>&nbsp; to
+<ul type="a">
+<li> prompt the user to input an 8-digit card ID
+<li> remove the card record if it is in the list, and otherwise print the message &nbsp;"<tt>Card not found.</tt>".
+</ul>
+<li> Your program <tt>cardLL.c</tt> should include a time complexity analysis, in Big-Oh notation, for all your functions that are also defined in <tt>cardLL.h</tt>.
+<li> You must ensure that all dynamically allocated memory is properly freed.
+</ol>
+
+<h2><small>Example</small></h2>
+
+Here is an example to show the desired behaviour of your program for stage 3:
+<pre class="command_line">
+<kbd class="shell">./main</kbd>
+Enter command (a,g,p,q,r, h for Help)> <b>a</b>
+Enter card ID: 11111111
+Enter amount: 50
+Card added.
+Enter command (a,g,p,q,r, h for Help)> <b>r</b>
+Enter card ID: 33333333
+Card not found.
+Enter command (a,g,p,q,r, h for Help)> <b>a</b>
+Enter card ID: 33333333
+Enter amount: 5
+Card added.
+Enter command (a,g,p,q,r, h for Help)> <b>p</b>
+------------------------
+Card ID: 11111111
+Balance: $50.00
+------------------------
+------------------------
+Card ID: 33333333
+Balance: $5.00
+------------------------
+Enter command (a,g,p,q,r, h for Help)> <b>a</b>
+Enter card ID: 33333333
+Enter amount: -1.10
+------------------------
+Card ID: 33333333
+Balance: $3.90
+Low balance
+------------------------
+Enter command (a,g,p,q,r, h for Help)> <b>g</b>
+Number of cards on file: 2
+Average balance: $26.95
+Enter command (a,g,p,q,r, h for Help)> <b>r</b>
+Enter card ID: 33333333
+Card removed.
+Enter command (a,g,p,q,r, h for Help)> <b>g</b>
+Number of cards on file: 1
+Average balance: $50.00
+Enter command (a,g,p,q,r, h for Help)> <b>q</b>
+Bye.
+</pre>
+
+<br><h2>Testing</h2>
+
+<p><i>We have created a script that can automatically test your program. To run this test you can execute the </i><tt>dryrun</tt><i> program for the corresponding assignment, i.e. <tt>assn1</tt>. It expects to find the programs </i><tt>main.c, cardRecord.c, cardLL.c</tt><i> in the current directory. You can use dryrun as follows:</i></p>
+<pre class="command_line">
+<kbd class="shell">~cs9024/bin/dryrun assn1</kbd>
+</pre>
+
+<p><i>Please note: Passing the dryrun tests does not guarantee that your program is correct. You should thoroughly test your program with your own test cases.</i></p>
+
+<h2>Submit</h2>
+
+<p><b>Note: Before you submit, you must ensure that your program compiles without errors or warnings on a CSE machine using the compiler options <tt>-Wall -Werror -std=c11</tt></b></p>
+For this project you will only need to submit program files (.c files). You can either submit through WebCMS3 or use the submit command
+<pre class="command_line">
+<kbd class="shell">give cs9024 assn1 main.c cardRecord.c cardLL.c</kbd>
+</pre>
+</p>
+<p>Do not forget to add the time complexity to your source code file <tt>cardLL.c</tt>.
+</p>
+You can submit as many times as you like &mdash; later submissions will overwrite earlier ones. You can check that your submission has been received on WebCMS3 or by using the following command:
+<pre class="command_line">
+<kbd class="shell">9024 classrun -check assn1</kbd>
+</pre>
+</p>
+
+<h2>Marking</h2>
+
+<p>This project will be marked on functionality in the first instance, so it is very important that the output of your program be <b><i>exactly</i></b> correct as shown in the examples above. Submissions which score very low on the automarking will be looked at by a human and may receive a few marks, provided the code is well-structured and commented.</p>
+
+<p>Programs that generate compilation errors will receive a very low mark, no matter what other virtues they may have. In general, a program that attempts a substantial part of the job and does that part correctly will receive more marks than one attempting to do the entire job but with many errors.</p>
+
+<p>Style considerations include:
+  <ul>
+    <li> readability
+    <li> structured programming
+    <li> good commenting
+  </ul>
+</p>
+
+<p>The main objective of this assignment is to give you more experience with dynamic data structures:
+<ul>
+<li> You will receive 0 marks for stage 1 if your program is not using the heap for a dynamic array, and 0 marks for stage 2 &amp; 3 if your program is not using a dynamic linked list.
+<li>You will also lose marks if your program has not freed all dynamically allocated memory upon termination.
+</ul>
+</p>
+
+<h2>Plagiarism</h2>
+
+<p>Group submissions will not be allowed. Your program must be entirely your own work. Plagiarism detection software will be used to compare all submissions pairwise (including submissions for similar projects in previous years, if applicable) and serious penalties will be applied, particularly in the case of repeat offences.</p>
+
+<ul>
+<li> <b><i>Do not copy ideas or code from others</i></b>
+<li> <b><i>Do not use a publicly accessible repository or allow anyone to see your code, not even after the deadline</i></b>
+</ul>
+
+<p>Please refer to the on-line sources to help you understand what plagiarism is and how it is dealt with at UNSW:</p>
+<ul>
+	<li><a href="https://student.unsw.edu.au/plagiarism">Plagiarism and Academic Integrity</a></li>
+	<li><a href="https://www.gs.unsw.edu.au/policy/documents/plagiarismpolicy.pdf">UNSW Plagiarism Policy Statement</a></li>
+	<li><a href="https://www.gs.unsw.edu.au/policy/documents/plagiarismprocedure.pdf">UNSW Plagiarism Procedure</a></li>
+</ul>
+
+<h2>Help</h2>
+
+See <a href="http://www.cse.unsw.edu.au/~cs9024/18s2/assn/assn1/faq.php">FAQ</a> for some hints on how to get started and for troubleshooting tips.
+
+<h2>Finally &hellip;</h2>
+
+Have fun! Michael
+
+</body>
+</html>
